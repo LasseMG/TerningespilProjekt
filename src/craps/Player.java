@@ -16,12 +16,6 @@ public class Player {
         this.die1 = new craps.Die();
         this.die2 = new craps.Die();
     }
-    public void throwDie() {
-        die1.roll();
-        die2.roll();
-        setFirstRoll();
-        rollCount++;
-    }
 
 
     public void setFirstRoll() {
@@ -57,24 +51,40 @@ public class Player {
         losses++;
     }
 
+    public void resetFirstRoll() {
+        die1.roll();
+        die2.roll();
+        firstRoll = die1.getFaceValue() + die2.getFaceValue();
+    }
+
+    public void throwDie() {
+        die1.roll();
+        die2.roll();
+        rollCount++;
+    }
+
     //First roll win eller loss
     public void firstRollOutcome() {
         if (firstRoll == 7 || firstRoll == 11) {
             System.out.println("7 or 11. WIN");
-            updateWins(); // ++ til wins
+            updateWins();
+            resetFirstRoll();
         } else if (firstRoll == 2 || firstRoll == 3 || firstRoll == 12) {
             System.out.println("First roll, bad roll. LOSS");
             updateLosses();
+            resetFirstRoll();
         } else {
             boolean stopGame = false;
             while (!stopGame) {
                 if (nextRoll == firstRoll) {
                     System.out.println("Same as first roll. WIN");
                     updateWins();
+                    resetFirstRoll();
                     stopGame = true;
                 } else if (nextRoll == 7) {
                     System.out.println("Bad roll. LOSS");
                     updateLosses();
+                    resetFirstRoll();
                     stopGame = true;
                 } else {
                     stopGame = true;
@@ -85,24 +95,30 @@ public class Player {
 
     public void play() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Roll?");
-        scanner.nextLine();
+        setFirstRoll();
+        throwDie();
         boolean finished = false;
         while (!finished) {
+            System.out.println("Roll?");
+            scanner.nextLine();
+
             throwDie();
-            firstRollOutcome(); //Flyt fra throwDice() hertil, fik det til at virke bedre
-            System.out.printf("Rolling... %d %d\n", die1.getFaceValue(), die2.getFaceValue());
-            System.out.println("First roll: " + firstRoll); //Vis første roll undervejs
-            System.out.println("Current roll: " + nextRoll); //Vis nyeste roll
+            firstRollOutcome();
+
+            System.out.printf("Rolling... %d, %d\n", die1.getFaceValue(), die2.getFaceValue());
+            System.out.println("First roll: " + firstRoll);
+            System.out.println("Current roll: " + (rollCount > 1 ? nextRoll : "N/A"));
+
             System.out.println("Roll again? (Y/n)");
             String again = scanner.nextLine();
+
             if (again.toLowerCase().equals("n")) {
                 finished = true;
             }
         }
+        scanner.close();
     }
 }
-
 /*
 PROGRAMMET SKAL KUNNE GØRE FØLGENDE:
  - Tælle antal runder, hvor mange rolls X
@@ -118,4 +134,5 @@ PROGRAMMET SKAL KUNNE GØRE FØLGENDE:
 TODO:
 Hvorfor skal jeg trykke 2 gange, før der så kommer 2 rolls?
  - 1 tryk, ingen output
+ - sker kun i nogen tilfælde
  */
