@@ -6,10 +6,10 @@ public class CrapsGame {
     public static void main(String[] args) {
         printRules();
         craps.Player player = new craps.Player();
-        printResults(player);
         player.play();
-
+        printResults(player);
     }
+
     //TODO Lav om til crabs game
     public static void printRules() {
         System.out.println("=====================================================");
@@ -22,7 +22,10 @@ public class CrapsGame {
     public static void printResults(Player player) {
         System.out.println("Results");
         System.out.println("-------");
-        System.out.println("Player rolled a total sum of: " + player.playerRollSum());
+        System.out.println("Player's first roll was: " + player.targetRoll());
+        System.out.println("Player's total wins: " + player.getWins());
+        System.out.println("Player's total losses: " + player.getLosses());
+        System.out.println("You played a total of " + player.getRollCount() + " rounds.");
     }
 }
 

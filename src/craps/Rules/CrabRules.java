@@ -1,4 +1,4 @@
-package rolltwodice;
+package craps.Rules;
 
 import java.util.Random;
 import java.util.Scanner;
