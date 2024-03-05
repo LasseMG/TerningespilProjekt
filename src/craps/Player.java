@@ -105,12 +105,12 @@ public class Player {
 
 /*
 PROGRAMMET SKAL KUNNE GØRE FØLGENDE:
- - Tælle antal runder X
+ - Tælle antal runder, hvor mange rolls X
  - Tælle wins og losses X
  - Rulle 7 eller 11 først = win X
  - Reset firstRoll efter win eller loss
  - firstRoll = nextRoll = win X
- - Opdater
+ - Opdater (glemte hvad jeg skulle skrive)
  - Rul 7 efter 1. runde = loss X
  */
 
