@@ -6,94 +6,82 @@ public class Player {
     //Feltvariable
     private craps.Die die1;
     private craps.Die die2;
-    private int targetRoll; //Det første roll, som gerne skal slås igen
-    private int nextRollSum; //De næste slag, som sammenholdes med targetRoll
+    private int firstRoll; //Det første roll, som gerne skal slås igen
+    private int nextRoll; //De næste slag, som sammenholdes med targetRoll
     private int rollCount; //Antal runder spillet
     private int wins; //Antal runder vundet
     private int losses; //Antal runder tabt
 
-
-    //Player Constructor
     public Player() {
         this.die1 = new craps.Die();
         this.die2 = new craps.Die();
     }
+    public void throwDie() {
+        die1.roll();
+        die2.roll();
+        setFirstRoll();
+        rollCount++;
+    }
 
+
+    public void setFirstRoll() {
+        if (rollCount == 0) {
+            firstRoll = die1.getFaceValue() + die2.getFaceValue();
+        } else {
+            nextRoll = die1.getFaceValue() + die2.getFaceValue();
+        }
+    }
+
+    //Get metode rollCount
     public int getRollCount() {
         return rollCount;
     }
 
-    //Throw dice metode, kalder alle "undermetoder"
-    public void throwDie() {
-        die1.roll();
-        die2.roll();
-        targetRoll();
-        nextRoll();
-        crabGameLogic();
-        rollCount++;
+    //Get metode losses
+    public int getLosses() {
+        return losses;
     }
 
-    //Metode til at finde sum af første slag
-    /*
-    Det første slag lagres for at sammenholde det med de næste slag.
-    Derfor hvis rollCount == 0, dvs. første runde, så kan vi sætte "målslaget".
-     */
-    public int targetRoll() {
-        if (rollCount == 0) {
-            targetRoll = die1.getFaceValue() + die2.getFaceValue();
-        }
-        return targetRoll;
-    }
-
-    //Metode til at finde sum af de næste slag, som skal sammenholdes med første slag
-    public int nextRoll() {
-        die1.roll();
-        die2.roll();
-        nextRollSum = die1.getFaceValue() + die2.getFaceValue();
-        return nextRollSum;
-    }
-
-    //Get metode targetRoll
-    public int getTargetRoll() {
-        return targetRoll;
-    }
-
-    //Get metode til nextRollSum
-    public int getNextRollSum() {
-        return nextRollSum;
-    }
-
-    //Get metode til wins
+    //Get metode wins
     public int getWins() {
         return wins;
     }
 
-    public int getLosses() {
-        return losses;
-    }
-    //Metode til spillogik
-    /*
-    I dette spil skal det stoppe når enten:
-        - Spiller slår samlet 7 eller 11 som det første --> Vinder (TODO counter == 0)
-        - Spiller slår samlet 2, 3, eller 12 som det første --> Taber
-        - Spiller på andet slag får den samme sum som i første salg --> Vinder
-        - Kaster 7 senere i spillet --> Taber TODO counter over 1...
-     */
-    String result;
-    public String crabGameLogic() {
-        if ((targetRoll == 7 || targetRoll == 11) && rollCount == 0) {
-            result = "Your first roll was " + targetRoll + "! You win.";
-            wins++;
-        } else if ((targetRoll == 2 || targetRoll == 3 || targetRoll == 12) && rollCount == 0) {
-            result = "Your first roll was " + targetRoll + "! You lose.";
-            losses++;
-        } else if (nextRollSum == targetRoll) {
-            result = "You rolled the same as your first roll of " + targetRoll + ". You win.";
-            wins++;
-        }
-        return result;
+    // + 1
+    public void updateWins() {
+        wins++;
     }
 
+    // + 1
+    public void updateLosses() {
+        losses++;
+    }
+
+    //First roll win eller loss
+    public void firstRollOutcome() {
+        if (firstRoll == 7 || firstRoll == 11) {
+            System.out.println("7 or 11. WIN");
+            updateWins(); // ++ til wins
+        } else if (firstRoll == 2 || firstRoll == 3 || firstRoll == 12) {
+            System.out.println("First roll, bad roll. LOSS");
+            updateLosses();
+        } else {
+            boolean stopGame = false;
+            while (!stopGame) {
+                if (nextRoll == firstRoll) {
+                    System.out.println("Same as first roll. WIN");
+                    updateWins();
+                    stopGame = true;
+                } else if (nextRoll == 7) {
+                    System.out.println("Bad roll. LOSS");
+                    updateLosses();
+                    stopGame = true;
+                } else {
+                    stopGame = true;
+                }
+            }
+        }
+    }
 
     public void play() {
         Scanner scanner = new Scanner(System.in);
@@ -101,15 +89,12 @@ public class Player {
         scanner.nextLine();
         boolean finished = false;
         while (!finished) {
-
             throwDie();
-            targetRoll = nextRollSum;
-
-            System.out.printf("Rolling... %d and %d = %d\n", die1.getFaceValue(), die2.getFaceValue(), nextRollSum);
-            System.out.println("First role: " + targetRoll);
-            System.out.println(result);
+            firstRollOutcome(); //Flyt fra throwDice() hertil, fik det til at virke bedre
+            System.out.printf("Rolling... %d %d\n", die1.getFaceValue(), die2.getFaceValue());
+            System.out.println("First roll: " + firstRoll); //Vis første roll undervejs
+            System.out.println("Current roll: " + nextRoll); //Vis nyeste roll
             System.out.println("Roll again? (Y/n)");
-
             String again = scanner.nextLine();
             if (again.toLowerCase().equals("n")) {
                 finished = true;
@@ -117,3 +102,20 @@ public class Player {
         }
     }
 }
+
+/*
+PROGRAMMET SKAL KUNNE GØRE FØLGENDE:
+ - Tælle antal runder X
+ - Tælle wins og losses X
+ - Rulle 7 eller 11 først = win X
+ - Reset firstRoll efter win eller loss
+ - firstRoll = nextRoll = win X
+ - Opdater
+ - Rul 7 efter 1. runde = loss X
+ */
+
+/*
+TODO:
+Hvorfor skal jeg trykke 2 gange, før der så kommer 2 rolls?
+ - 1 tryk, ingen output
+ */
