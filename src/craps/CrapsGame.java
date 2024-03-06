@@ -4,6 +4,11 @@ import craps.Player;
 
 import java.util.Arrays;
 
+/*
+TODO: note til opgaveløsningen
+Virker 100% efter hensigten med undtagelse for, at man af og til skal trykke to gange for at få første roll.
+ */
+
 public class CrapsGame {
     public static void main(String[] args) {
         printRules();

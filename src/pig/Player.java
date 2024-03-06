@@ -3,18 +3,23 @@ package pig;
 
 import java.util.Scanner;
 
+import static pig.PigGame.getMaxPoints;
+
 public class Player {
     Scanner scanner = new Scanner(System.in);
     private pig.Die die;
     private int playerScore;
     private double averageRolls;
+    private int rollCounter;
 
 
     //Constructor spiller 1
     public Player() {
         this.die = new pig.Die(); //1 terning pr spiller
         this.playerScore = 0;
+        //this.averageRolls;
     }
+
 
 
     //Get metoder
@@ -24,30 +29,10 @@ public class Player {
 
     public void throwDie() {
         die.roll();
-        turn();
     }
 
-
-
-    public int turn() {
-        int roll = die.getFaceValue();
-        //TODO stop runden, hvis maxScore er opnået af en player
-
-        System.out.println("You rolled " + roll); //Vis, hvad jeg slog
-
-        int turnPoints = 0; //Tæller til rundens point
-
-            if (roll == 1) {
-                turnPoints = 0;
-                return playerScore += turnPoints;
-
-            } else {
-                turnPoints += roll;
-                return playerScore += turnPoints;
-                //TODO
-                //spørg om de vil rulle igen, hvis ja rul videre
-                //hvis ikke de vil rulle videre, tag point opnået og smid i playerScore
-            }
+    public int getRollCounter() {
+        return rollCounter;
     }
 
     //Get playerScore efter den er regnet sammen
@@ -55,22 +40,52 @@ public class Player {
         return playerScore;
     }
 
+    /*
+    Logikken for spillet er sat sammen med play().
+     */
     public void play() {
-
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Roll?");
-        scanner.nextLine();
+        int turnPoints = 0;
+        boolean turnOver = false;
 
-        boolean finished = false;
-        while (!finished) {
-            throwDie();
-            System.out.println("Roll again? (Y/n)");
-            System.out.println(playerScore);
-            String again = scanner.nextLine();
-            if (again.toLowerCase().equals("n")) {
-                finished = true;
+        //Turnover sker, når nogen enten kommer over maxPoint, eller slår en 1'er
+        while (!turnOver) {
+            if (getPlayerScore() >= getMaxPoints()) {
+                System.out.println("Max point reached!");
+                break;
+            } else {
+
+                //Spørg om man vil roll igen
+                System.out.println("Roll?");
+                String again = scanner.nextLine();
+                if (again.toLowerCase().equals("n")) {
+                    turnOver = true; //Turen slutter hvis nej
+                } else { //Alt koden kører hvis ja
+                    //rollCounter; //rollCounter mhp. at tælle gennemsnit af rolls pr. runde. Nåede ikke i mål.
+                    throwDie();
+
+                    int rollResult = die.getFaceValue();
+
+                    System.out.println("You rolled: " + rollResult);
+
+
+                    if (rollResult == 1) { //Slag på 1 resetter rundens point
+                        System.out.println("Rolled 1. Lost points.");
+                        turnPoints = 0;
+                        System.out.println("Current score: " + playerScore);
+                        turnOver = true;
+                    } else { // Andre slag end 1 lægges oveni rundens point
+                        turnPoints += rollResult;
+                        System.out.println(rollResult + " added to total points."); //Vis nyeste slag
+                        System.out.println("Current score: " + (playerScore + turnPoints)); // Rundens point lægges til sidst i playerScore
+
+                        if (playerScore + turnPoints >= getMaxPoints()) {
+                            System.out.println("Max point reached!");
+                            turnOver = true;
+                        }
+                    }
+                }
             }
         }
     }
 }
-

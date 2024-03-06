@@ -1,8 +1,8 @@
 package rolltwodice;
 
 /*
-Ændringer fra RollOneDie:
-- Opgave 1.1: simple ændringer af, hvad der skrives af regler etc, i konteksten af at det er RollTwoDice.
+TODO noter til opgaveløsningen:
+Skulle gerne virke 100%
  */
 public class RollTwoDiceGame {
     public static void main(String[] args) {
