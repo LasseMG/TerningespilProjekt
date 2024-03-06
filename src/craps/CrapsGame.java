@@ -9,7 +9,7 @@ public class CrapsGame {
         printRules();
         System.out.println();
 
-        craps.Player player = new craps.Player();
+        Player player = new Player();
         System.out.println("Playings crab");
         player.play();
 
@@ -35,6 +35,5 @@ public class CrapsGame {
         System.out.println("-------");
         System.out.println("Wins: " + player.getWins());
         System.out.println("Losses: " + player.getLosses());
-        System.out.println("Total rounds: " + player.getRollCount());
     }
 }
