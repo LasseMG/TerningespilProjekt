@@ -60,18 +60,11 @@ public class Player {
     public int getHugeRoll() {
         return hugeRoll;
     }
-    /*
-    Ændringer fra RollOneDie:
-    - Opgave 1.1: Linje 48: Hent værdi af begge terninger objekter.
-    - %d er en "format specifier", der siger hvor et tal skal stå i denne string. Vi har 2 tal, die1 og die2, og disse
-      skal indgå i vores String. "d" er typen af tal, decimal etc.
-      Der tilføjes en %d mere, så den printer begge vores terninger.
-     */
 
-    /*Opgave 1.3:
-    Slag med samme antal øjne
+    //Opgave 1.3: Slag med samme antal øjne
+    /*
     - sammenholder de to terningers værdi. Er de ens, tilføj 1 til sameValueRoll.
-     */
+    */
     public int sameDiceValue() {
         if (die1.getFaceValue() == die2.getFaceValue()) {
             sameValueRoll += 1;
@@ -79,13 +72,13 @@ public class Player {
         return sameValueRoll;
     }
 
+    //Opgave 1.3: Find det største slag.
     /*
-    Opgave 1.3: Metode til at finde det største slag.
     To variable: previousNumber og number.
     Number er de sidste slag, er det større end previousNumber, bliver det til den nye værdi af hugeRoll.
     previousRoll bliver opdateret til at være sidste slag.
     Sammenholder igen variable, tilskriver ny værdi hvis større.
-     */
+    */
     private int previousNumber = 0;
 
     public int biggestRoll() {
@@ -98,13 +91,12 @@ public class Player {
         return hugeRoll;
     }
 
+    //Opgave 1.3: Fordeling af slagene
     /*
-    Opgave 1.3: Fordeling af slagene
     - array med en størrelse på 6, 0 i hver plads.
     - tilføj 1 på hver plads 0-5 for hvert slag 1-6. Et slag på 1 giver fx +1 til element på [0]
     - tager slagets værdi til indeksering, og tilføjer 1. Frem for at have et giga if-statement.
      */
-
     Integer[] eachResultCount = {0, 0, 0, 0, 0, 0};
     public Integer[] setEachResultCount() {
         int faceValueDie1 = die1.getFaceValue();
@@ -116,8 +108,8 @@ public class Player {
         return eachResultCount;
     }
 
+    //Opgave 1.3: Fordeling af slagene
     /*
-    Opgave 1.3: Fordeling af slagene
     - tager result-strengen og tilføjer hvert element fra array gennem et for loop, hvor den også formaterer teksten.
      */
     public String printEachResultCount() {
@@ -129,8 +121,9 @@ public class Player {
         return result;
     }
 
+    //Opgave 1.3: Gennemsnit af alle slag.
     /*
-    Opgave 1.3: Beregn gennemsnit af alle slag. Benytter de feltvariable, vi allerede har, og skaber en ny ud af disse.
+    Benytter de feltvariable, vi allerede har, og skaber en ny ud af disse.
      */
     public double calculateAverageRoll() {
         averageRoll = (double) rollTotalSum / rollCount;
@@ -144,6 +137,7 @@ public class Player {
         return averageRoll;
     }
 
+    //Standard play-metode, ingen ændringer
     public void play() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Roll?");

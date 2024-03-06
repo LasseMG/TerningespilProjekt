@@ -39,17 +39,15 @@ public class Player {
 
             if (roll == 1) {
                 turnPoints = 0;
-                //TODO
-                //stop turen hvis man rammer 1, sæt point fra denne runde til 0
-                //men sæt ikke playerScore til 0. Det er kun point fra denne runde.
+                return playerScore += turnPoints;
 
             } else {
                 turnPoints += roll;
+                return playerScore += turnPoints;
                 //TODO
                 //spørg om de vil rulle igen, hvis ja rul videre
                 //hvis ikke de vil rulle videre, tag point opnået og smid i playerScore
             }
-            return playerScore += turnPoints;
     }
 
     //Get playerScore efter den er regnet sammen
@@ -58,21 +56,19 @@ public class Player {
     }
 
     public void play() {
-        boolean maxScoreReached = false; //så længe maxScore ikke er nået, fortsæt spil
 
-        while (!maxScoreReached) {
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Roll?");
-            scanner.nextLine();
-            boolean finished = false;
-            while (!finished) {
-                throwDie();
-                System.out.println("Roll again? (Y/n)");
-                System.out.println(playerScore);
-                String again = scanner.nextLine();
-                if (again.toLowerCase().equals("n")) {
-                    finished = true;
-                }
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Roll?");
+        scanner.nextLine();
+
+        boolean finished = false;
+        while (!finished) {
+            throwDie();
+            System.out.println("Roll again? (Y/n)");
+            System.out.println(playerScore);
+            String again = scanner.nextLine();
+            if (again.toLowerCase().equals("n")) {
+                finished = true;
             }
         }
     }
